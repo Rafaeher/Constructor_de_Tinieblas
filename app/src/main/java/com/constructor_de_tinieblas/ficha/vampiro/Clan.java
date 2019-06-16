@@ -5,28 +5,40 @@ import java.util.Random;
 /**
  * Enumerado de los distintos clanes de vampiros.
  */
-public enum Clan
-{
-    ASSAMITA(Disciplina.CELERIDAD, Disciplina.EXTINCION, Disciplina.OFUSCACION),
-    BRUJAH(Disciplina.CELERIDAD, Disciplina.POTENCIA, Disciplina.PRESENCIA),
-    CAITIFF(Disciplina.aleatoria(), Disciplina
-            .aleatoria(), Disciplina.aleatoria()),
-    GANGREL(Disciplina.ANIMALISMO, Disciplina.FORTALEZA, Disciplina.PRESENCIA),
-    GIOVANNI(Disciplina.DOMINACION, Disciplina.NECROMANCIA, Disciplina.POTENCIA),
-    LASOMBRA(Disciplina.DOMINACION, Disciplina.OBTENEBRACION, Disciplina.POTENCIA),
-    MALKAVIAN(Disciplina.AUSPEX, Disciplina.DEMENTACION, Disciplina.OFUSCACION),
-    NOSFERATU(Disciplina.ANIMALISMO, Disciplina.OFUSCACION, Disciplina.POTENCIA),
-    RAVNOS(Disciplina.ANIMALISMO, Disciplina.FORTALEZA, Disciplina.QUIMERISMO),
-    SEGUIDORES_DE_SET(Disciplina.OFUSCACION, Disciplina.PRESENCIA, Disciplina.PRESENCIA),
-    TOREADOR(Disciplina.AUSPEX, Disciplina.CELERIDAD, Disciplina.PRESENCIA),
-    TREMERE(Disciplina.AUSPEX, Disciplina.DOMINACION, Disciplina.TAUMATURGIA),
-    TZIMISCE(Disciplina.ANIMALISMO, Disciplina.AUSPEX, Disciplina.VICISITUD),
-    VENTRUE(Disciplina.DOMINACION, Disciplina.FORTALEZA, Disciplina.PRESENCIA);
-
-     private Disciplina disciplina1;
-     private Disciplina disciplina2;
-     private Disciplina disciplina3;
-
+public enum Clan {
+    ASSAMITA(Disciplina.CELERIDAD, Disciplina.EXTINCION, Disciplina.OFUSCACION,
+             "Recibe un nivel de daño letal por cada punto de Vitae consumido"),
+    BRUJAH(Disciplina.CELERIDAD, Disciplina.POTENCIA, Disciplina.PRESENCIA,
+           "+2 a la dificultad de todas las tiradaspara resistir o controlar el Frenesí"),
+    CAITIFF(Disciplina.aleatoria(), Disciplina.aleatoria(), Disciplina.aleatoria(),
+            "No puede comprar Estatus. +2 a la dificultad para tiradas Sociales con no Caitiff si no está asentado en la comunidad. No transmite rasgos de Clan a sus chiquillos"),
+    GANGREL(Disciplina.ANIMALISMO, Disciplina.FORTALEZA, Disciplina.PRESENCIA,
+            "Gana un rasgo animaltemporal con cada Frenesí.Excepcionalmente, puede ser permanente"),
+    GIOVANNI(Disciplina.DOMINACION, Disciplina.NECROMANCIA, Disciplina.POTENCIA,
+             "Su Beso no es placentero para quien lo recibe y causa el doble de daño"),
+    LASOMBRA(Disciplina.DOMINACION, Disciplina.OBTENEBRACION, Disciplina.POTENCIA, "Sin reflejo"),
+    MALKAVIAN(Disciplina.AUSPEX, Disciplina.DEMENTACION, Disciplina.OFUSCACION,
+              "Sufre, como mínimo, un Trastorno incurable"),
+    NOSFERATU(Disciplina.ANIMALISMO, Disciplina.OFUSCACION, Disciplina.POTENCIA,
+              "0 en Apariencia, no mejorable por ningún medio"),
+    RAVNOS(Disciplina.ANIMALISMO, Disciplina.FORTALEZA, Disciplina.QUIMERISMO,
+           "Posee un vicio y tira Autocontrol / Instinto (dificultad 6) para no caer en él"),
+    SEGUIDORES_DE_SET(Disciplina.OFUSCACION, Disciplina.PRESENCIA, Disciplina.PRESENCIA,
+                      "+2 al daño por luz solar. –1 dado en lareserva para acciones bajo luces brillantes"),
+    TOREADOR(Disciplina.AUSPEX, Disciplina.CELERIDAD, Disciplina.PRESENCIA,
+             "Cae en trance ante una gran belleza. TiraAutocontrol / Instinto (dificultad 6) para no caer"),
+    TREMERE(Disciplina.AUSPEX, Disciplina.DOMINACION, Disciplina.TAUMATURGIA,
+            "Solo necesita beber dos veces para estar Vinculado a nivel 3."),
+    TZIMISCE(Disciplina.ANIMALISMO, Disciplina.AUSPEX, Disciplina.VICISITUD,
+             "Solo obtiene reposo si descansa sobre al menos dos puñados de su tierra natal"),
+    VENTRUE(Disciplina.DOMINACION, Disciplina.FORTALEZA, Disciplina.PRESENCIA,
+            "Solo obtiene sustento de sutipo de presa predilecta");
+    
+    private Disciplina disciplina1;
+    private Disciplina disciplina2;
+    private Disciplina disciplina3;
+    private String debilidad;
+    
     /**
      * Constructora para los Clanes (no Caitiff).
      *
@@ -34,54 +46,57 @@ public enum Clan
      * @param _disciplina2: una disciplina.
      * @param _disciplina3: una disciplina.
      */
-     Clan(Disciplina _disciplina1, Disciplina _disciplina2, Disciplina _disciplina3)
-     {
-         disciplina1 = _disciplina1;
-         disciplina2 = _disciplina2;
-         disciplina3 = _disciplina3;
-     }
-
+    Clan(Disciplina _disciplina1, Disciplina _disciplina2, Disciplina _disciplina3, String _debilidad) {
+        disciplina1 = _disciplina1;
+        disciplina2 = _disciplina2;
+        disciplina3 = _disciplina3;
+        debilidad = _debilidad;
+    }
+    
     /**
      * Obtiene la primera disciplina
      *
      * @return disciplina1
      */
-    public Disciplina getDisciplina1()
-    {
+    public Disciplina getDisciplina1() {
         return disciplina1;
     }
-
+    
     /**
      * Obtiene la segunda disciplina
      *
      * @return disciplina2
      */
-    public Disciplina getDisciplina2()
-    {
+    public Disciplina getDisciplina2() {
         return disciplina2;
     }
-
+    
     /**
      * Obtiene la tercera disciplina
      *
      * @return disciplina3
      */
-    public Disciplina getDisciplina3()
-    {
+    public Disciplina getDisciplina3() {
         return disciplina3;
     }
-
+    
+    public String getDebilidad() {
+        return debilidad;
+    }
+    
     /**
      * Devuelve un Clan al azar.
      *
      * @return Clan aleatorizar.
      */
-    public static Clan aleatorio()
-    {
+    public static Clan aleatorio() {
         Random random = new Random();
         Clan[] clanes = Clan.values();
         int eleccion = random.nextInt(clanes.length);
-
+        
         return clanes[eleccion];
     }
-}
+    
+    public String nombre() {
+        return this.toString().substring(0, 1) + this.toString().substring(1).toLowerCase();
+    }}

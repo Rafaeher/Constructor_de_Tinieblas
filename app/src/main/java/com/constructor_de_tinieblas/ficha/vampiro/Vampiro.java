@@ -283,7 +283,7 @@ public class Vampiro extends Ficha
      */
     public void aleatorizar(String _cronica)
     {
-        aleatorizar(_cronica, 15);
+        aleatorizar(_cronica, 0);
     }
 
     /**
@@ -298,7 +298,7 @@ public class Vampiro extends Ficha
 
         // Es importantes mantener el orden de determinadas operaciones para garantizar la correcta creación aleatoria.
         elegirSexo(random);
-        elegirNombre();
+        elegirNombre(); // TODO esto ahora mismo no funciona
         jugador = "Master";
         cronica = _cronica;
         naturaleza = Personalidad.aleatoria();
@@ -306,22 +306,101 @@ public class Vampiro extends Ficha
         concepto = LectorEjemplos.getConceptos(); // TODO esto ahora mismo no funciona
         concepto = "Concepto Patata";
         elegirClan();
+        debilidad = clan.getDebilidad();
         elegirAfiliacion(random);
         distribuirCirculosAtributos(random);
         distribuirCirculosHabilidades(random);
         distribuirCirculosDisciplinas(random);
         distribuirCirculosTrasfondos(random);
-        senda = Senda.HUMANIDAD;
+        elegirSenda(random);
         distribuirCirculosVirtudes(random);
         puntuacionSenda = virtudSuperior + virtudIntermedia;
         fuerzaVoluntad = coraje;
         distribuirPuntosGratuitos(puntosGratuitos, random);
         calcularGeneracion();
+        calcularPorte();
         sangre = new Sangre(generacion);
 
-        crearSire(random);
+        crearSire(random); // TODO esto ahora mismo no funciona
     }
-
+    
+    /**
+     * Elige la Senda del vampiro aleatoriamente
+     *
+     * @param random el generador de números aleatorios
+     */
+    private void elegirSenda(Random random) {
+        
+        ArrayList<Senda> sendas = new ArrayList<>();
+        
+        switch(afiliacion) {
+            case SABBAT:
+                sendas.add(Senda.CAIN);
+                sendas.add(Senda.CATAROS);
+                sendas.add(Senda.ARMONIA);
+                sendas.add(Senda.CORAZON_SALVAJE);
+                sendas.add(Senda.HUESOS);
+                sendas.add(Senda.LILITH);
+                sendas.add(Senda.PODER_Y_VOZ_INTERIOR);
+                
+                if(clan.equals(Clan.TZIMISCE)) {
+                    sendas.add(Senda.MUERTE_Y_ALMA);
+                    sendas.add(Senda.METAMORFOSIS);
+                } else if (clan.equals(Clan.LASOMBRA)) {
+                    sendas.add(Senda.NOCHE);
+                }
+                break;
+            case NINGUNA:
+                sendas.add(Senda.HUMANIDAD);
+                
+                if(clan.equals(Clan.GANGREL)) {
+                    sendas.add(Senda.ARMONIA);
+                    sendas.add(Senda.CORAZON_SALVAJE);
+                }
+                break;
+            case INCONNOU:
+                sendas.add(Senda.HUMANIDAD);
+                break;
+            case CAMARILLA:
+                sendas.add(Senda.HUMANIDAD);
+                break;
+            case CLAN_ASSAMITA:
+                sendas.add(Senda.SANGRE);
+                break;
+            case CLAN_GIOVANNI:
+                sendas.add(Senda.HUMANIDAD);
+                sendas.add(Senda.HUESOS);
+                break;
+            case CLAN_RAVNOS:
+                sendas.add(Senda.HUMANIDAD);
+                sendas.add(Senda.PARADOJA);
+                break;
+            case CLAN_SETITA:
+                sendas.add(Senda.TIFON);
+                break;
+            case MOVIMIENTO_ANARQUISTA:
+                sendas.add(Senda.HUMANIDAD);
+                break;
+        }
+        
+        senda = sendas.get(random.nextInt(sendas.size()));
+    }
+    
+    /**
+     * Atendiendo a la puntuación de la Senda, calcula el porte correspondiente
+     */
+    private void calcularPorte() {
+        if (puntuacionSenda == 10) {
+            porte = 2;
+        } else if (puntuacionSenda >= 8) {
+            porte = 1;
+        } else if (puntuacionSenda >= 3) {
+            porte = -1;
+        } else {
+            porte = -2;
+        }
+    }
+    
     /**
      * Distribuye los círculos iniciales entre las distintas disciplinas del Clan del Vampiro. Por tanto, es necesario
      * que tenga un Clan previamente asignado.
@@ -623,8 +702,8 @@ public class Vampiro extends Ficha
                 .append("Naturaleza: ").append(naturaleza.toString().toLowerCase()).append(ls)
                 .append("Conducta: ").append(conducta.toString().toLowerCase()).append(ls)
                 .append("Concepto: ").append(concepto.toLowerCase()).append(ls)
-                .append("Clan: ").append(clan.toString(), 0, 1)
-                    .append(clan.toString().toLowerCase().substring(1)).append(ls)
+                .append("Clan: ").append(clan.nombre()).append(ls)
+                .append("Afiliación: ").append(afiliacion.nombre()).append(ls)
                 .append("Generación: ").append(generacion).append(ls)
                 .append("Sire: ").append(sire.nombre).append(ls)
                 .append(ls)
@@ -658,7 +737,7 @@ public class Vampiro extends Ficha
                 .append(ls)
                 .append(ls)
                 .append(ls)
-                .append("···   DISCIPLINAS   ···").append(ls)
+                .append("· DISCIPLINAS ·").append(ls)
                 .append(getlistaRasgos(disciplinas))
                 .append(ls)
                 .append(ls)
@@ -679,8 +758,8 @@ public class Vampiro extends Ficha
                 .append("· ").append(senda.getNombre().toUpperCase()).append(" ·").append(ls)
                 .append(getCirculos(puntuacionSenda)).append(ls)
                 .append("Porte (").append(senda.getPorte().toString(), 0, 1)
-                    .append(senda.getPorte().toString().toLowerCase().substring(1)).append("): ").append(porte)
-                    .append(ls)
+                    .append(senda.getPorte().toString().toLowerCase().substring(1)).append("): ")
+                    .append(porte >= 0 ? "+" : "").append(porte).append(ls)
                 .append(ls)
                 .append(ls)
                 .append("· FUERZA DE VOLUNTAD ·").append(ls)

@@ -13,18 +13,20 @@
         android:text="@string/aleatorio"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/guardarVampiro"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ficha"
         app:layout_constraintVertical_bias="0.998" />
 
     <EditText
-        android:clickable="false"
         android:id="@+id/ficha"
         android:layout_width="299dp"
         android:layout_height="500dp"
         android:layout_marginTop="8dp"
-        android:focusable="false"
+        android:clickable="false"
         android:ems="10"
+        android:focusable="false"
         android:gravity="start|top"
         android:inputType="none"
         app:layout_constraintBottom_toTopOf="@+id/crearVampiro"
@@ -32,5 +34,16 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0" />
+
+    <Button
+        android:id="@+id/guardarVampiro"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/guardar"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/crearVampiro"
+        app:layout_constraintTop_toBottomOf="@+id/ficha" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

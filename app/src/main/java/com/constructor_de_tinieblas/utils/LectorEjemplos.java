@@ -32,6 +32,8 @@ public class LectorEjemplos
             
             Log.v("ObtenerNombre", "Se ha entrado en el bloque try");
             
+            
+            
             fileReader = new FileReader (new File(Environment.getExternalStorageDirectory(), fichero));
             
             Log.v("ObtenerNombre","se ha creado el FileReader");

@@ -36,8 +36,7 @@ public enum Senda
      * @param _virtudIntermedia: la virtud intermedia
      * @param _porte: el porte
      */
-    Senda(String _nombre, Virtud _virtudSuperior, Virtud _virtudIntermedia, Porte _porte)
-    {
+    Senda(String _nombre, Virtud _virtudSuperior, Virtud _virtudIntermedia, Porte _porte) {
         nombre = _nombre;
         virtudSuperior = _virtudSuperior;
         virtudIntermedia = _virtudIntermedia;
@@ -49,8 +48,7 @@ public enum Senda
      *
      * @return senda aleatoria.
      */
-    public static Senda aleatoria()
-    {
+    public static Senda aleatoria() {
         Senda[] sendas = Senda.values();
         int indice = new Random().nextInt(sendas.length);
 
