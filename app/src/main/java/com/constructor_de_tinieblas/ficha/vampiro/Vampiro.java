@@ -1,5 +1,7 @@
 package com.constructor_de_tinieblas.ficha.vampiro;
 
+import android.util.JsonReader;
+import android.util.JsonWriter;
 import android.util.Log;
 
 import com.constructor_de_tinieblas.ficha.Atributo;
@@ -7,7 +9,9 @@ import com.constructor_de_tinieblas.ficha.Ficha;
 import com.constructor_de_tinieblas.ficha.Personalidad;
 import com.constructor_de_tinieblas.utils.LectorEjemplos;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Random;
 import java.util.TreeMap;
 
@@ -16,9 +20,9 @@ import java.util.TreeMap;
  */
 public class Vampiro extends Ficha
 {
-    private TreeMap<Disciplina, Integer> disciplinas; // Las disciplinas del Vampiro (<nombre, puntuación>)
+    private HashMap<Disciplina, Integer> disciplinas; // Las disciplinas del Vampiro (<nombre, puntuación>)
 
-    private TreeMap<String, Integer> trasfondos; // Los trasfondos del Vampiro (<nombre, puntuación>)
+    private HashMap<String, Integer> trasfondos; // Los trasfondos del Vampiro (<nombre, puntuación>)
 
     private Senda senda;
     private int puntuacionSenda;
@@ -35,33 +39,30 @@ public class Vampiro extends Ficha
 
     private Clan clan; // El Clan al que pertenece el Vampiro
 
-    private Vampiro sire; // El Sire del Vampiro
+    private String sire; // El Sire del Vampiro
 
     protected String debilidad; // Debilidad / es del Vampiro
 
     protected Sangre sangre; // Reserva de Sangre del Vampiro
 
-    protected ArrayList<String> meritos; // Los méritos del Vampiro TODO
-    protected ArrayList<String> defectos; // Los defectos del Vampiro TODO
 
 
-
-    public TreeMap<Disciplina, Integer> getDisciplinas()
+    public HashMap<Disciplina, Integer> getDisciplinas()
     {
         return disciplinas;
     }
 
-    public void setDisciplinas(TreeMap<Disciplina, Integer> disciplinas)
+    public void setDisciplinas(HashMap<Disciplina, Integer> disciplinas)
     {
         this.disciplinas = disciplinas;
     }
 
-    public TreeMap<String, Integer> getTrasfondos()
+    public HashMap<String, Integer> getTrasfondos()
     {
         return trasfondos;
     }
 
-    public void setTrasfondos(TreeMap<String, Integer> trasfondos)
+    public void setTrasfondos(HashMap<String, Integer> trasfondos)
     {
         this.trasfondos = trasfondos;
     }
@@ -156,12 +157,12 @@ public class Vampiro extends Ficha
         this.clan = clan;
     }
 
-    public Vampiro getSire()
+    public String getSire()
     {
         return sire;
     }
 
-    public void setSire(Vampiro sire)
+    public void setSire(String sire)
     {
         this.sire = sire;
     }
@@ -186,26 +187,6 @@ public class Vampiro extends Ficha
         this.sangre = sangre;
     }
 
-    public ArrayList<String> getMeritos()
-    {
-        return meritos;
-    }
-
-    public void setMeritos(ArrayList<String> meritos)
-    {
-        this.meritos = meritos;
-    }
-
-    public ArrayList<String> getDefectos()
-    {
-        return defectos;
-    }
-
-    public void setDefectos(ArrayList<String> defectos)
-    {
-        this.defectos = defectos;
-    }
-
 
 
     /**
@@ -213,18 +194,80 @@ public class Vampiro extends Ficha
      */
     public Vampiro()
     {
-        disciplinas = new TreeMap<>();
-        trasfondos = new TreeMap<>();
-
-        meritos = new ArrayList<>();
-        defectos = new ArrayList<>();
-
-        // Inicializar HashMaps de habilidades
-        colocarTalentos();
-        colocarTecnicas();
-        colocarConocimientos();
+        disciplinas = new HashMap<>();
+        trasfondos = new HashMap<>();
+        sangre = new Sangre();
     }
-
+    
+    @Override
+    protected void inicializarAtributosInstancia() {
+        disciplinas = new HashMap<>();
+        trasfondos = new HashMap<>();
+        sangre = new Sangre();
+    }
+    
+    @Override
+    protected void leerDefaultJSON(JsonReader reader,  String nameJSON) throws Exception {
+        switch(nameJSON) {
+            case "disciplinas":
+                reader.beginObject();
+                while (reader.hasNext()) {
+                    disciplinas.put(Disciplina.valueOf(reader.nextName()), reader.nextInt());
+                }
+                reader.endObject();
+                break;
+            case "trasfondos":
+                reader.beginObject();
+                while (reader.hasNext()) {
+                    trasfondos.put(reader.nextName(), reader.nextInt());
+                }
+                reader.endObject();
+                break;
+            case "senda":
+                senda = Senda.valueOf(reader.nextString());
+                break;
+            case "puntuacionSenda":
+                puntuacionSenda = reader.nextInt();
+                break;
+            case "porte":
+                porte = reader.nextInt();
+                break;
+            case "virtudSuperior":
+                virtudSuperior = reader.nextInt();
+                break;
+            case "virtudIntermedia":
+                virtudIntermedia = reader.nextInt();
+                break;
+            case "coraje":
+                coraje = reader.nextInt();
+                break;
+            case "generacion":
+                generacion = reader.nextInt();
+                sangre = new Sangre(generacion);
+                break;
+            case "afiliacion":
+                afiliacion = Afiliacion.valueOf(reader.nextString());
+                break;
+            case "clan":
+                clan = Clan.valueOf(reader.nextString());
+                break;
+            case "sire":
+                sire = reader.nextString();
+                break;
+            case "debilidad":
+                debilidad = reader.nextString();
+                break;
+            case "reservaSangre":
+                sangre.setReserva(reader.nextInt());
+                break;
+            default:
+                Log.wtf("LeerJSON", "Se ha intentado leer el JSON para un vampiro y no se reconoce el nombre "
+                                    + "\"" + nameJSON + "\"");
+                throw new Exception("Se ha intentado leer el JSON para un vampiro y no se reconoce un nombre");
+        }
+    
+    }
+    
     /**
      * Coloca los conocimientos básicos del Vampiro en el HashMap.
      */
@@ -295,7 +338,12 @@ public class Vampiro extends Ficha
     public void aleatorizar(String _cronica, int puntosGratuitos)
     {
         Random random = new Random();
-
+    
+        // Inicializar HashMaps de habilidades
+        colocarTalentos();
+        colocarTecnicas();
+        colocarConocimientos();
+        
         // Es importantes mantener el orden de determinadas operaciones para garantizar la correcta creación aleatoria.
         elegirSexo(random);
         elegirNombre(); // TODO esto ahora mismo no funciona
@@ -304,7 +352,7 @@ public class Vampiro extends Ficha
         naturaleza = Personalidad.aleatoria();
         conducta = Personalidad.aleatoria();
         concepto = LectorEjemplos.getConceptos(); // TODO esto ahora mismo no funciona
-        concepto = "Concepto Patata";
+        concepto = "PATATA";
         elegirClan();
         debilidad = clan.getDebilidad();
         elegirAfiliacion(random);
@@ -321,7 +369,8 @@ public class Vampiro extends Ficha
         calcularPorte();
         sangre = new Sangre(generacion);
 
-        crearSire(random); // TODO esto ahora mismo no funciona
+        //crearSire(random); // TODO aleatorizar nombre del sire
+        sire = "PATATA";
     }
     
     /**
@@ -635,23 +684,6 @@ public class Vampiro extends Ficha
     }
 
     /**
-     * Crea la información básica (sexo, nombre, generación y Clan) del Sire de un Vampiro.
-     * Requiere que el Vampiro tenga asignada generación y Clan.
-     *
-     * @param random: el generador de números aleatorios.
-     */
-    private void crearSire(Random random)
-    {
-        Vampiro newSire = new Vampiro();
-
-        newSire.elegirSexo(random);
-        newSire.elegirNombre();
-        newSire.generacion = generacion - 1;
-        newSire.clan = clan;
-        sire = newSire;
-    }
-
-    /**
      * Elige un nombre al azar para el Vampiro. Requiere que el Vampiro tenga sexo asignado.
      *
      */
@@ -705,7 +737,7 @@ public class Vampiro extends Ficha
                 .append("Clan: ").append(clan.nombre()).append(ls)
                 .append("Afiliación: ").append(afiliacion.nombre()).append(ls)
                 .append("Generación: ").append(generacion).append(ls)
-                .append("Sire: ").append(sire.nombre).append(ls)
+                .append("Sire: ").append(sire).append(ls)
                 .append(ls)
                 .append(ls)
                 .append("|||   ATRIBUTOS   |||").append(ls)
@@ -770,5 +802,26 @@ public class Vampiro extends Ficha
                 .append(debilidad).append(ls);
 
         return strBuilder.toString();
+    }
+    
+    @Override
+    protected void escribirJSON(JsonWriter writer) throws IOException {
+        super.escribirJSON(writer);
+        
+        escribirJSONRasgos(writer, "disciplinas", disciplinas);
+        escribirJSONRasgos(writer, "trasfondos", trasfondos);
+        
+        writer.name("senda").value(senda.toString())
+              .name("puntuacionSenda").value(puntuacionSenda)
+              .name("porte").value(porte)
+              .name("virtudSuperior").value(virtudSuperior)
+              .name("virtudIntermedia").value(virtudIntermedia)
+              .name("coraje").value(coraje)
+              .name("generacion").value(generacion)
+              .name("afiliacion").value(afiliacion.toString())
+              .name("clan").value(clan.toString())
+              .name("sire").value(sire)
+              .name("debilidad").value(debilidad)
+              .name("reservaSangre").value("sangre");
     }
 }

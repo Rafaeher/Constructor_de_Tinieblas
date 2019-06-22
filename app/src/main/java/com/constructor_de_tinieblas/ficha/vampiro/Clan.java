@@ -26,13 +26,13 @@ public enum Clan {
     SEGUIDORES_DE_SET(Disciplina.OFUSCACION, Disciplina.PRESENCIA, Disciplina.PRESENCIA,
                       "+2 al daño por luz solar. –1 dado en lareserva para acciones bajo luces brillantes"),
     TOREADOR(Disciplina.AUSPEX, Disciplina.CELERIDAD, Disciplina.PRESENCIA,
-             "Cae en trance ante una gran belleza. TiraAutocontrol / Instinto (dificultad 6) para no caer"),
+             "Cae en trance ante una gran belleza. Tira Autocontrol / Instinto (dificultad 6) para no caer"),
     TREMERE(Disciplina.AUSPEX, Disciplina.DOMINACION, Disciplina.TAUMATURGIA,
             "Solo necesita beber dos veces para estar Vinculado a nivel 3."),
     TZIMISCE(Disciplina.ANIMALISMO, Disciplina.AUSPEX, Disciplina.VICISITUD,
              "Solo obtiene reposo si descansa sobre al menos dos puñados de su tierra natal"),
     VENTRUE(Disciplina.DOMINACION, Disciplina.FORTALEZA, Disciplina.PRESENCIA,
-            "Solo obtiene sustento de sutipo de presa predilecta");
+            "Solo obtiene sustento de su tipo de presa predilecta");
     
     private Disciplina disciplina1;
     private Disciplina disciplina2;
@@ -97,6 +97,6 @@ public enum Clan {
         return clanes[eleccion];
     }
     
-    public String nombre() {
+    protected String nombre() {
         return this.toString().substring(0, 1) + this.toString().substring(1).toLowerCase();
     }}

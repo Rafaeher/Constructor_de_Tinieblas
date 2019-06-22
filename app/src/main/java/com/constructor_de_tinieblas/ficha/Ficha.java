@@ -1,12 +1,22 @@
 package com.constructor_de_tinieblas.ficha;
 
 
-import java.util.*;
+import android.util.JsonReader;
+import android.util.JsonWriter;
+import android.util.Log;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
 
 /**
  * La clase para representar una ficha de personaje.
  */
-public class Ficha {
+public abstract class Ficha {
     protected String nombre; // El nombre del personaje
     protected String jugador; // El nombre del jugador
     protected String cronica; // El nombre de la crónica
@@ -19,21 +29,21 @@ public class Ficha {
     protected int fuerzaVoluntad; // Los círculos en fuerza de voluntad
     
     // ATRIBUTOS
-    protected TreeMap<Atributo, Integer> fisicos; // Atributo físicos del personaje (<nombre, puntuación>)
-    protected TreeMap<Atributo, Integer> sociales; // Atributo sociales del personaje (<nombre, puntuación>)
-    protected TreeMap<Atributo, Integer> mentales; // Atributo mentales del personaje (<nombre, puntuación>)
+    protected HashMap<Atributo, Integer> fisicos; // Atributo físicos del personaje (<nombre, puntuación>)
+    protected HashMap<Atributo, Integer> sociales; // Atributo sociales del personaje (<nombre, puntuación>)
+    protected HashMap<Atributo, Integer> mentales; // Atributo mentales del personaje (<nombre, puntuación>)
     
     // HABILIDADES
-    protected TreeMap<String, Integer> talentos; // Los talentos del personaje (<nombre, puntuación>)
-    protected TreeMap<String, Integer> tecnicas; // Las técnicas del personaje (<nombre, puntuación>)
-    protected TreeMap<String, Integer> conocimientos; // Los conocimientos del Vampiro (<nombre, puntuación>)
+    protected HashMap<String, Integer> talentos; // Los talentos del personaje (<nombre, puntuación>)
+    protected HashMap<String, Integer> tecnicas; // Las técnicas del personaje (<nombre, puntuación>)
+    protected HashMap<String, Integer> conocimientos; // Los conocimientos del Vampiro (<nombre, puntuación>)
     
-    public static final int MAX_ATB = 5; // El máximo de círculos que puede tener un atributo
-    public static final int MAX_HAB_INI = 3;
+    protected ArrayList<String> meritos; // Los méritos del personaje TODO
+    protected ArrayList<String> defectos; // Los defectos del personaje TODO
+    
+    protected static final int MAX_ATB = 5; // El máximo de círculos que puede tener un atributo
+    protected static final int MAX_HAB_INI = 3;
     // El máximo de círculos que puede tener una habilidad antes de repartir los puntos gratuitos
-    
-    public static final int MAX_HAB_FIN = 5;
-    // El máximo de círculos que puede tener una habilidad al repartir los puntos gratuitos y en adelante
     
     
     public String getNombre() {
@@ -100,52 +110,72 @@ public class Ficha {
         this.fuerzaVoluntad = fuerzaVoluntad;
     }
     
-    public TreeMap<Atributo, Integer> getFisicos() {
+    public HashMap<Atributo, Integer> getFisicos() {
         return fisicos;
     }
     
-    public void setFisicos(TreeMap<Atributo, Integer> fisicos) {
+    public void setFisicos(HashMap<Atributo, Integer> fisicos) {
         this.fisicos = fisicos;
     }
     
-    public TreeMap<Atributo, Integer> getSociales() {
+    public HashMap<Atributo, Integer> getSociales() {
         return sociales;
     }
     
-    public void setSociales(TreeMap<Atributo, Integer> sociales) {
+    public void setSociales(HashMap<Atributo, Integer> sociales) {
         this.sociales = sociales;
     }
     
-    public TreeMap<Atributo, Integer> getMentales() {
+    public HashMap<Atributo, Integer> getMentales() {
         return mentales;
     }
     
-    public void setMentales(TreeMap<Atributo, Integer> mentales) {
+    public void setMentales(HashMap<Atributo, Integer> mentales) {
         this.mentales = mentales;
     }
     
-    public TreeMap<String, Integer> getTalentos() {
+    public HashMap<String, Integer> getTalentos() {
         return talentos;
     }
     
-    public void setTalentos(TreeMap<String, Integer> talentos) {
+    public void setTalentos(HashMap<String, Integer> talentos) {
         this.talentos = talentos;
     }
     
-    public TreeMap<String, Integer> getTecnicas() {
+    public HashMap<String, Integer> getTecnicas() {
         return tecnicas;
     }
     
-    public void setTecnicas(TreeMap<String, Integer> tecnicas) {
+    public void setTecnicas(HashMap<String, Integer> tecnicas) {
         this.tecnicas = tecnicas;
     }
     
-    public TreeMap<String, Integer> getConocimientos() {
+    public HashMap<String, Integer> getConocimientos() {
         return conocimientos;
     }
     
-    public void setConocimientos(TreeMap<String, Integer> conocimientos) {
+    public void setConocimientos(HashMap<String, Integer> conocimientos) {
         this.conocimientos = conocimientos;
+    }
+    
+    public ArrayList<String> getMeritos()
+    {
+        return meritos;
+    }
+    
+    public void setMeritos(ArrayList<String> meritos)
+    {
+        this.meritos = meritos;
+    }
+    
+    public ArrayList<String> getDefectos()
+    {
+        return defectos;
+    }
+    
+    public void setDefectos(ArrayList<String> defectos)
+    {
+        this.defectos = defectos;
     }
     
     /**
@@ -159,13 +189,13 @@ public class Ficha {
         
         fuerzaVoluntad = 0;
         
-        fisicos = new TreeMap<>();
-        sociales = new TreeMap<>();
-        mentales = new TreeMap<>();
+        fisicos = new HashMap<>();
+        sociales = new HashMap<>();
+        mentales = new HashMap<>();
         
-        talentos = new TreeMap<>();
-        tecnicas = new TreeMap<>();
-        conocimientos = new TreeMap<>();
+        talentos = new HashMap<>();
+        tecnicas = new HashMap<>();
+        conocimientos = new HashMap<>();
         
         fisicos.put(Atributo.FUERZA, 1);
         fisicos.put(Atributo.DESTREZA, 1);
@@ -179,6 +209,110 @@ public class Ficha {
         mentales.put(Atributo.ASTUCIA, 1);
         mentales.put(Atributo.PERCEPCION, 1);
     }
+    
+    public void leerJSON(JsonReader reader) {
+        
+        try {
+            inicializarAtributos();
+            
+            reader.beginObject();
+            
+            while(reader.hasNext()) {
+                String nameJSON = reader.nextName();
+                
+                switch(nameJSON) {
+                    case "nombre":
+                        nombre = reader.nextString();
+                        break;
+                    case "jugador":
+                        jugador = reader.nextString();
+                        break;
+                    case "cronica":
+                        cronica = reader.nextString();
+                        break;
+                    case "concepto":
+                        concepto = reader.nextString();
+                        break;
+                    case "sexo":
+                        sexo = Sexo.valueOf(reader.nextString());
+                        break;
+                    case "naturaleza":
+                        naturaleza = Personalidad.valueOf(reader.nextString());
+                        break;
+                    case "conducta":
+                        conducta = Personalidad.valueOf(reader.nextString());
+                        break;
+                    case "fuerzaVoluntad":
+                        fuerzaVoluntad = reader.nextInt();
+                        break;
+                    case "fisicos":
+                        reader.beginObject();
+                        while (reader.hasNext()) {
+                            fisicos.put(Atributo.valueOf(reader.nextName()), reader.nextInt());
+                        }
+                        reader.endObject();
+                        break;
+                    case "sociales":
+                        reader.beginObject();
+                        while (reader.hasNext()) {
+                            sociales.put(Atributo.valueOf(reader.nextName()), reader.nextInt());
+                        }
+                        reader.endObject();
+                        break;
+                    case "mentales":
+                        reader.beginObject();
+                        while (reader.hasNext()) {
+                            mentales.put(Atributo.valueOf(reader.nextName()), reader.nextInt());
+                        }
+                        reader.endObject();
+                        break;
+                    case "talentos":
+                        reader.beginObject();
+                        while (reader.hasNext()) {
+                            talentos.put(reader.nextName(), reader.nextInt());
+                        }
+                        reader.endObject();
+                        break;
+                    case "tecnicas":
+                        reader.beginObject();
+                        while (reader.hasNext()) {
+                            tecnicas.put(reader.nextName(), reader.nextInt());
+                        }
+                        reader.endObject();
+                        break;
+                    case "conocimientos":
+                        reader.beginObject();
+                        while (reader.hasNext()) {
+                            conocimientos.put(reader.nextName(), reader.nextInt());
+                        }
+                        reader.endObject();
+                        break;
+                    default:
+                        leerDefaultJSON(reader, nameJSON);
+                        break;
+                }
+            }
+            
+            reader.endObject();
+        } catch (Exception e) {
+            Log.wtf("CrearFicha", "Ha habido algún problema con el JsonReader");
+            e.printStackTrace();
+        }
+    }
+    
+    private void inicializarAtributos() {
+        fisicos = new HashMap<>();
+        sociales = new HashMap<>();
+        mentales = new HashMap<>();
+        talentos = new HashMap<>();
+        tecnicas = new HashMap<>();
+        conocimientos = new HashMap<>();
+        inicializarAtributosInstancia();
+    }
+    
+    protected abstract void inicializarAtributosInstancia();
+    
+    protected abstract void leerDefaultJSON(JsonReader reader, String nameJSON) throws Exception;
     
     /**
      * Distribuye aleatoriamente los atributos según las normas de creación de un personaje de Mundo de Tinieblas.
@@ -378,5 +512,54 @@ public class Ficha {
 //
 //        return stringBuilder.toString();
         return Integer.toString(n);
+    }
+
+    protected static <Rasgo> void escribirJSONRasgos(JsonWriter writer, String nombre, final Map<Rasgo, Integer> rasgos)
+            throws IOException {
+        writer.name(nombre);
+        writer.beginObject();
+        for(Rasgo rasgo : rasgos.keySet()) {
+            writer.name(rasgo.toString()).value(rasgos.get(rasgo));
+        }
+        writer.endObject();
+    }
+    
+    protected void escribirJSON(JsonWriter writer) throws IOException {
+        
+        writer.name("nombre").value(nombre)
+              .name("jugador").value(jugador)
+              .name("cronica").value(cronica)
+              .name("concepto").value(concepto)
+              .name("sexo").value(sexo.toString())
+              .name("naturaleza").value(naturaleza.toString())
+              .name("conducta").value(conducta.toString())
+              .name("fuerzaVoluntad").value(fuerzaVoluntad);
+    
+        escribirJSONRasgos(writer, "fisicos", fisicos);
+        escribirJSONRasgos(writer, "sociales", sociales);
+        escribirJSONRasgos(writer, "mentales", mentales);
+        escribirJSONRasgos(writer, "talentos", talentos);
+        escribirJSONRasgos(writer, "tecnicas", tecnicas);
+        escribirJSONRasgos(writer, "conocimientos", conocimientos);
+    }
+    
+    public String obtenerJSON() {
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+        
+        try {
+            JsonWriter writer = new JsonWriter(new OutputStreamWriter(output, "UTF-8"));
+            
+            writer.setIndent("     ");
+            writer.beginObject();
+            escribirJSON(writer);
+            writer.endObject();
+            writer.close();
+            
+        } catch (IOException e) {
+            Log.wtf("CrearJSON", "Ha habido algún problema con el JsonWriter");
+            e.printStackTrace();
+        }
+        
+        return output.toString();
     }
 }
