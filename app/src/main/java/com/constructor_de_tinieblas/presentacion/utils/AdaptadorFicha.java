@@ -1,64 +1,64 @@
 package com.constructor_de_tinieblas.presentacion.utils;
 
+import android.app.Activity;
+import android.content.Context;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.BaseAdapter;
 import android.widget.TextView;
-
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.RecyclerView.Adapter;
 
 import com.constructor_de_tinieblas.R;
 import com.constructor_de_tinieblas.negocio.ficha.Ficha;
 
 import java.util.List;
 
-public class AdaptadorFicha<Raza extends Ficha> extends Adapter<AdaptadorFicha.ViewHolder> {
+public class AdaptadorFicha<Raza extends Ficha> extends BaseAdapter {
     
-    private List<Raza> fichas;
+    protected Activity activity;
+    protected List<Raza> fichas;
     
     /**
      * Constructora que guarda una lista de fichas de personaje de Mundo de Tinieblas
      *
      * @param _fichas la lista de fichas
      */
-    public AdaptadorFicha(List<Raza> _fichas) {
+    public AdaptadorFicha(Activity _activity, List<Raza> _fichas) {
+        activity = _activity;
         fichas = _fichas;
     }
     
-    @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        TextView
-                view =
-                (TextView) LayoutInflater.from(parent.getContext()).inflate(R.layout.ficha, parent, false);
-        
-        // Aquí se podrían definir tamaños, márgenes, etc...
-        
-        return new ViewHolder(view);
-    }
-    
-    @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.textView.setText(Long.toString(fichas.get(position).getId()));
-    }
-    
-    @Override
-    public int getItemCount() {
+    public int getCount() {
         return fichas.size();
     }
     
-    protected static class ViewHolder extends RecyclerView.ViewHolder {
+    @Override
+    public Raza getItem(int i) {
+        return fichas.get(i);
+    }
+    
+    @Override
+    public long getItemId(int i) {
+        return i;
+    }
+    
+    @Override
+    public View getView(int i, View convertView, ViewGroup parent) {
         
-        private TextView textView;
+        View view = convertView;
         
-        protected ViewHolder(@NonNull TextView _textView) {
-            super(_textView);
-            textView = _textView;
+        if (convertView == null) {
+            LayoutInflater inflater = (LayoutInflater)  activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            view = inflater.inflate(R.layout.ficha, null);
         }
+    
+        Ficha ficha = fichas.get(i);
+    
+        TextView nombre = view.findViewById(R.id.nombre), id = view.findViewById(R.id.idFicha);
+        nombre.setText(ficha.getNombre());
+        id.setText(Long.toString(ficha.getId()));
         
-        protected TextView getTextView() {
-            return textView;
-        }
+        return view;
     }
 }
