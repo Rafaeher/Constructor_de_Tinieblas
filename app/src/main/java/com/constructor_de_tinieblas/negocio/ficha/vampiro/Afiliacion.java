@@ -1,4 +1,4 @@
-package com.constructor_de_tinieblas.ficha.vampiro;
+package com.constructor_de_tinieblas.negocio.ficha.vampiro;
 
 public enum Afiliacion
 {

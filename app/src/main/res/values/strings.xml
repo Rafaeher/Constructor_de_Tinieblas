@@ -2,4 +2,6 @@
     <string name="app_name">Constructor de Tinieblas</string>
     <string name="aleatorio">Aleatorio</string>
     <string name="guardar">Guardar</string>
+    <string name="crear_vampiro">Crear Vampiro</string>
+    <string name="buscar_vampiro">Buscar Vampiro</string>
 </resources>

@@ -1,4 +1,4 @@
-package com.constructor_de_tinieblas.ficha;
+package com.constructor_de_tinieblas.negocio.ficha;
 
 
 import android.util.JsonReader;
@@ -17,6 +17,7 @@ import java.util.Random;
  * La clase para representar una ficha de personaje.
  */
 public abstract class Ficha {
+    protected long id; // El id que tendrá la ficha cuando se guarde en la base de datos
     protected String nombre; // El nombre del personaje
     protected String jugador; // El nombre del jugador
     protected String cronica; // El nombre de la crónica
@@ -176,6 +177,14 @@ public abstract class Ficha {
     public void setDefectos(ArrayList<String> defectos)
     {
         this.defectos = defectos;
+    }
+    
+    public long getId() {
+        return id;
+    }
+    
+    public void setId(long id) {
+        this.id = id;
     }
     
     /**

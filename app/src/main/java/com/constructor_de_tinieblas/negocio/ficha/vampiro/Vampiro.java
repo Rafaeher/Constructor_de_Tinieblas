@@ -1,12 +1,12 @@
-package com.constructor_de_tinieblas.ficha.vampiro;
+package com.constructor_de_tinieblas.negocio.ficha.vampiro;
 
 import android.util.JsonReader;
 import android.util.JsonWriter;
 import android.util.Log;
 
-import com.constructor_de_tinieblas.ficha.Atributo;
-import com.constructor_de_tinieblas.ficha.Ficha;
-import com.constructor_de_tinieblas.ficha.Personalidad;
+import com.constructor_de_tinieblas.negocio.ficha.Atributo;
+import com.constructor_de_tinieblas.negocio.ficha.Ficha;
+import com.constructor_de_tinieblas.negocio.ficha.Personalidad;
 import com.constructor_de_tinieblas.utils.LectorEjemplos;
 
 import java.io.IOException;
@@ -822,6 +822,6 @@ public class Vampiro extends Ficha
               .name("clan").value(clan.toString())
               .name("sire").value(sire)
               .name("debilidad").value(debilidad)
-              .name("reservaSangre").value("sangre");
+              .name("reservaSangre").value(sangre.getReserva());
     }
 }

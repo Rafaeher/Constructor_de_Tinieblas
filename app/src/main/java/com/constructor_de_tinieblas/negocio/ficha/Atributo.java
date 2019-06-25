@@ -1,4 +1,4 @@
-package com.constructor_de_tinieblas.ficha;
+package com.constructor_de_tinieblas.negocio.ficha;
 
 /**
  * Enumerado que representa los atributos que tiene cualquier personaje

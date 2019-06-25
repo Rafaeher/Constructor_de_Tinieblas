@@ -1,4 +1,4 @@
-package com.constructor_de_tinieblas.ficha;
+package com.constructor_de_tinieblas.negocio.ficha;
 
 import java.util.Random;
 

@@ -1,4 +1,4 @@
-package com.constructor_de_tinieblas.ficha.vampiro;
+package com.constructor_de_tinieblas.negocio.ficha.vampiro;
 
 import java.util.Random;
 
