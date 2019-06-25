@@ -3,9 +3,11 @@ package com.constructor_de_tinieblas.negocio.gestor;
 import android.content.Context;
 
 import com.constructor_de_tinieblas.integracion.DAO.DAOVampiro;
+import com.constructor_de_tinieblas.integracion.Lector;
 import com.constructor_de_tinieblas.negocio.ficha.vampiro.Vampiro;
 
 import java.util.List;
+import java.util.Random;
 
 public class GestorVampiros {
     
@@ -14,10 +16,11 @@ public class GestorVampiros {
     /**
      * Constructora a partir de un contexto
      *
-     * @param contexto contexto para actualizar el DAOVampiro
+     * @param _contexto contexto para actualizar el DAOVampiro y
      */
-    private GestorVampiros(Context contexto) {
-        DAOVampiro.actualizaInstancia(contexto);
+    private GestorVampiros(Context _contexto) {
+        DAOVampiro.darContexto(_contexto);
+        Lector.INSTANCIA.darContexto(_contexto);
     }
     
     /**
@@ -39,8 +42,12 @@ public class GestorVampiros {
      * @return vampiro aleatorio
      */
     public Vampiro vampiroAleatorio(String cronica) {
-        Vampiro vampiro = new Vampiro();
-        vampiro.aleatorizar(cronica);
+        Random random = new Random();
+        String nombre = Lector.INSTANCIA.nombreMasculinoAleatorio(random);
+        String concepto = Lector.INSTANCIA.conceptoAleatorio(random);
+        String sire = Lector.INSTANCIA.nombreMasculinoAleatorio(random);
+        Vampiro vampiro = new Vampiro(nombre, cronica, concepto, sire);
+        vampiro.aleatorizar(random);
         return vampiro;
     }
     

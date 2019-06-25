@@ -7,7 +7,6 @@ import android.util.Log;
 import com.constructor_de_tinieblas.negocio.ficha.Atributo;
 import com.constructor_de_tinieblas.negocio.ficha.Ficha;
 import com.constructor_de_tinieblas.negocio.ficha.Personalidad;
-import com.constructor_de_tinieblas.utils.LectorEjemplos;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -186,14 +185,30 @@ public class Vampiro extends Ficha
     {
         this.sangre = sangre;
     }
-
-
+    
+    /**
+     * Constructora por defecto, que inicializa las estructuras
+     */
+    public Vampiro() {
+        disciplinas = new HashMap<>();
+        trasfondos = new HashMap<>();
+        sangre = new Sangre();
+    }
 
     /**
-     * Constructora por defecto
+     * Constructora para inicializar los atributos principales
+     *
+     * @param _nombre el nombre del vampiro
+     * @param _cronica el nombre de la crónica que se va a jugar
+     * @param _concepto el concepto del vampiro
+     * @param _sire el nombre del sire del vampiro
      */
-    public Vampiro()
+    public Vampiro(String _nombre, String _cronica, String _concepto, String _sire)
     {
+        nombre = _nombre;
+        cronica = _cronica;
+        concepto = _concepto;
+        sire = _sire;
         disciplinas = new HashMap<>();
         trasfondos = new HashMap<>();
         sangre = new Sangre();
@@ -322,23 +337,21 @@ public class Vampiro extends Ficha
     /**
      * Obtiene un vampiro generado aleatoriamente con los puntos gratuitos por defecto del manual.
      *
-     * @param _cronica: el nombre de la Crónica
+     * @param random el generador de números aleatorios
      */
-    public void aleatorizar(String _cronica)
+    public void aleatorizar(Random random)
     {
-        aleatorizar(_cronica, 0);
+        aleatorizar(15, random);
     }
 
     /**
      * Obtiene un vampiro generado aleatoriamente con los puntos gratuitos dados
      *
-     * @param _cronica: el nombre de la Crónica
      * @param puntosGratuitos: los puntos gratuitos del personaje
+     * @param random: el generador de números aleatorios
      */
-    public void aleatorizar(String _cronica, int puntosGratuitos)
+    public void aleatorizar(int puntosGratuitos, Random random)
     {
-        Random random = new Random();
-    
         // Inicializar HashMaps de habilidades
         colocarTalentos();
         colocarTecnicas();
@@ -346,13 +359,8 @@ public class Vampiro extends Ficha
         
         // Es importantes mantener el orden de determinadas operaciones para garantizar la correcta creación aleatoria.
         elegirSexo(random);
-        elegirNombre(); // TODO esto ahora mismo no funciona
-        jugador = "Master";
-        cronica = _cronica;
         naturaleza = Personalidad.aleatoria();
         conducta = Personalidad.aleatoria();
-        concepto = LectorEjemplos.getConceptos(); // TODO esto ahora mismo no funciona
-        concepto = "PATATA";
         elegirClan();
         debilidad = clan.getDebilidad();
         elegirAfiliacion(random);
@@ -368,9 +376,6 @@ public class Vampiro extends Ficha
         calcularGeneracion();
         calcularPorte();
         sangre = new Sangre(generacion);
-
-        //crearSire(random); // TODO aleatorizar nombre del sire
-        sire = "PATATA";
     }
     
     /**
@@ -682,22 +687,7 @@ public class Vampiro extends Ficha
     {
         clan = Clan.aleatorio();
     }
-
-    /**
-     * Elige un nombre al azar para el Vampiro. Requiere que el Vampiro tenga sexo asignado.
-     *
-     */
-    private void elegirNombre()
-    {
-        switch(sexo) //TODO ahora mismo esto suelta una excepción y no funciona
-        {
-            case HOMBRE: nombre = LectorEjemplos.getNombreMasculinoEsp(); break;
-            case MUJER: nombre = LectorEjemplos.getNombreFemeninoEsp(); break;
-        }
-        
-        //TODO eliminar en algún momento
-        nombre = "PATATA";
-    }
+    
 
     /**
      * Distribuye aleatoriamente los atributos según las normas de creación de un Vampiro. Es necesario que el Clan

@@ -55,7 +55,7 @@ public class DAOVampiro {
      *
      * @param contexto el contexto del que se debe crear el nuevo DAO
      */
-    public static void actualizaInstancia(Context contexto) {
+    public static void darContexto(Context contexto) {
         instancia = new DAOVampiro(contexto);
     }
     

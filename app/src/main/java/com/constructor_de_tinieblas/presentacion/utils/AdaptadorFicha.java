@@ -40,20 +40,19 @@ public class AdaptadorFicha<Raza extends Ficha> extends BaseAdapter {
     
     @Override
     public long getItemId(int i) {
-        return i;
+        return fichas.get(i).getId();
     }
     
     @Override
     public View getView(int i, View convertView, ViewGroup parent) {
         
         View view = convertView;
+        Ficha ficha = fichas.get(i);
         
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater)  activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view = inflater.inflate(R.layout.ficha, null);
         }
-    
-        Ficha ficha = fichas.get(i);
     
         TextView nombre = view.findViewById(R.id.nombre), id = view.findViewById(R.id.idFicha);
         nombre.setText(ficha.getNombre());
