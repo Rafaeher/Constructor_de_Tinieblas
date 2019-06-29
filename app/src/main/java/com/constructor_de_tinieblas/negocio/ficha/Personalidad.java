@@ -62,4 +62,13 @@ public enum Personalidad
 
         return personalidades[random.nextInt(personalidades.length)];
     }
+    
+    /**
+     * Devuelve el nombre correspondiente a este enumerado
+     *
+     * @return nombre
+     */
+    public String nombre() {
+        return this.toString().substring(0, 1) + this.toString().substring(1).toLowerCase().replace("_", " ");
+    }
 }

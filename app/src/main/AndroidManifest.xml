@@ -25,6 +25,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".presentacion.actividades.ListaVampiros" />
+        <activity android:name=".presentacion.actividades.BuscarVampiro" />
     </application>
 
 </manifest>

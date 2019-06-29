@@ -115,7 +115,7 @@ public class DAOVampiro {
         Cursor cursor = bdatos.query(true,
                                      TABLA_VAMPIRO,
                                      new String[] {VAMPIRO_ID, VAMPIRO_NOMBRE, VAMPIRO_FICHA},
-                                     VAMPIRO_NOMBRE + "='" + nombre + "'",
+                                     VAMPIRO_NOMBRE + " LIKE '" + nombre + "'",
                                      null, null, null, null, null);
         
         Log.v(BDLOG, "Se ha realizado la query");

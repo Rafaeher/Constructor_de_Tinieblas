@@ -11,9 +11,10 @@ public enum Clan {
     BRUJAH(Disciplina.CELERIDAD, Disciplina.POTENCIA, Disciplina.PRESENCIA,
            "+2 a la dificultad de todas las tiradaspara resistir o controlar el Frenesí"),
     CAITIFF(Disciplina.aleatoria(), Disciplina.aleatoria(), Disciplina.aleatoria(),
-            "No puede comprar Estatus. +2 a la dificultad para tiradas Sociales con no Caitiff si no está asentado en la comunidad. No transmite rasgos de Clan a sus chiquillos"),
+            "No puede comprar Estatus. +2 a la dificultad para tiradas Sociales con no Caitiff si no está"
+            + " asentado en la comunidad. No transmite rasgos de Clan a sus chiquillos"),
     GANGREL(Disciplina.ANIMALISMO, Disciplina.FORTALEZA, Disciplina.PRESENCIA,
-            "Gana un rasgo animaltemporal con cada Frenesí.Excepcionalmente, puede ser permanente"),
+            "Gana un rasgo animal temporal con cada Frenesí.Excepcionalmente, puede ser permanente"),
     GIOVANNI(Disciplina.DOMINACION, Disciplina.NECROMANCIA, Disciplina.POTENCIA,
              "Su Beso no es placentero para quien lo recibe y causa el doble de daño"),
     LASOMBRA(Disciplina.DOMINACION, Disciplina.OBTENEBRACION, Disciplina.POTENCIA, "Sin reflejo"),
@@ -98,5 +99,5 @@ public enum Clan {
     }
     
     protected String nombre() {
-        return this.toString().substring(0, 1) + this.toString().substring(1).toLowerCase();
+        return this.toString().substring(0, 1) + this.toString().substring(1).toLowerCase().replace("_", " ");
     }}

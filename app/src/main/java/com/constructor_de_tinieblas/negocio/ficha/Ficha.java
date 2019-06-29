@@ -571,4 +571,11 @@ public abstract class Ficha {
         
         return output.toString();
     }
+    
+    /**
+     * Devuelve un string con una breve descripción identificativa de la ficha
+     *
+     * @return descripcion
+     */
+    public abstract String descripcion();
 }

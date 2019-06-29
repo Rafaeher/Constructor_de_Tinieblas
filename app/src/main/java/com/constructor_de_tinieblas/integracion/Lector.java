@@ -69,6 +69,9 @@ public enum Lector {
     public String conceptoAleatorio(Random random) {
         if (conceptos == null) {
             conceptos = recursos.getString(R.string.conceptos).split(" ");
+            for(int i = 0; i < conceptos.length; ++i) {
+                conceptos[i] = conceptos[i].replace("_", " ");
+            }
         }
         
         return conceptos[random.nextInt(conceptos.length)];

@@ -1,6 +1,7 @@
 package com.constructor_de_tinieblas.presentacion.actividades;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,20 +16,17 @@ public class Menu extends Activity {
         Log.v("Menu", "Se crea la vista");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.menu);
-        
         crearBotonCrearVampiro();
         crearBotonBuscarVampiro();
     }
     
-    private void crearBotonBuscarVampiro() {
-        Button buscar = findViewById(R.id.vistaBuscarVampiro);
-    
-        buscar.setOnClickListener(view -> startActivity(new Intent(Menu.this, ListaVampiros.class)));
-    }
-    
     private void crearBotonCrearVampiro() {
         Button crear = findViewById(R.id.vistaCrearVampiro);
-        
-        crear.setOnClickListener(view -> startActivity(new Intent(Menu.this, CrearVampiro.class)));
+        crear.setOnClickListener(view -> startActivity(new Intent(getApplicationContext(), CrearVampiro.class)));
+    }
+    
+    private void crearBotonBuscarVampiro() {
+        Button buscar = findViewById(R.id.vistaBuscarVampiro);
+        buscar.setOnClickListener(view -> startActivity(new Intent(getApplicationContext(), BuscarVampiro.class)));
     }
 }

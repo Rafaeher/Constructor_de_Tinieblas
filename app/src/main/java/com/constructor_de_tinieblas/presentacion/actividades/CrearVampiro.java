@@ -2,9 +2,9 @@ package com.constructor_de_tinieblas.presentacion.actividades;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,7 +41,7 @@ public class CrearVampiro extends Activity {
                     Toast.makeText(this, "Algo ha salido mal y no se ha podido guardar el vampiro", Toast.LENGTH_LONG).show();
                 }
                 
-                ((EditText) findViewById(R.id.ficha)).setText("", TextView.BufferType.NORMAL);
+                ((TextView) findViewById(R.id.ficha)).setText("", TextView.BufferType.NORMAL);
                 vampiro = null;
             } else {
                 Toast.makeText(this, "¡Primero tienes que crear un vampiro!", Toast.LENGTH_LONG).show();
@@ -56,11 +56,12 @@ public class CrearVampiro extends Activity {
         Button aleatorio = findViewById(R.id.crearVampiro);
     
         aleatorio.setOnClickListener(view -> {
-            EditText text = findViewById(R.id.ficha);
+            TextView text = findViewById(R.id.ficha);
             GestorVampiros gestor = GestorVampiros.getInstancia();
             
             vampiro = gestor.vampiroAleatorio("Crónica Patata");
             text.setText(vampiro.toString(), TextView.BufferType.NORMAL);
+            text.setMovementMethod(new ScrollingMovementMethod());
         });
     }
 }

@@ -54,9 +54,9 @@ public class AdaptadorFicha<Raza extends Ficha> extends BaseAdapter {
             view = inflater.inflate(R.layout.ficha, null);
         }
     
-        TextView nombre = view.findViewById(R.id.nombre), id = view.findViewById(R.id.idFicha);
-        nombre.setText(ficha.getNombre());
-        id.setText(Long.toString(ficha.getId()));
+        TextView descripcion = view.findViewById(R.id.descripcion), id = view.findViewById(R.id.idFicha);
+        descripcion.setText(ficha.descripcion());
+        id.setText("ID " + ficha.getId());
         
         return view;
     }
