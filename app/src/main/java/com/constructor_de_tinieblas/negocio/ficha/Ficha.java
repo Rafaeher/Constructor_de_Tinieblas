@@ -29,6 +29,9 @@ public abstract class Ficha {
     
     protected int fuerzaVoluntad; // Los círculos en fuerza de voluntad
     
+    protected Double latitud; // Latitud del hogar del personaje (null si no tiene hogar)
+    protected Double longitud; // Longitud del hogar del personaje (null si no tiene hogar)
+    
     // ATRIBUTOS
     protected HashMap<Atributo, Integer> fisicos; // Atributo físicos del personaje (<nombre, puntuación>)
     protected HashMap<Atributo, Integer> sociales; // Atributo sociales del personaje (<nombre, puntuación>)
@@ -190,7 +193,7 @@ public abstract class Ficha {
     /**
      * Constructora por defecto
      */
-    public Ficha() {
+    protected Ficha() {
         nombre = "";
         jugador = "";
         cronica = "";
@@ -217,6 +220,9 @@ public abstract class Ficha {
         mentales.put(Atributo.INTELIGENCIA, 1);
         mentales.put(Atributo.ASTUCIA, 1);
         mentales.put(Atributo.PERCEPCION, 1);
+        
+        latitud = 40.63;
+        longitud = -4.0;
     }
     
     public void leerJSON(JsonReader reader) {
@@ -253,6 +259,12 @@ public abstract class Ficha {
                         break;
                     case "fuerzaVoluntad":
                         fuerzaVoluntad = reader.nextInt();
+                        break;
+                    case "latitud":
+                        latitud = reader.nextDouble();
+                        break;
+                    case "longitud":
+                        longitud = reader.nextDouble();
                         break;
                     case "fisicos":
                         reader.beginObject();
@@ -542,7 +554,9 @@ public abstract class Ficha {
               .name("sexo").value(sexo.toString())
               .name("naturaleza").value(naturaleza.toString())
               .name("conducta").value(conducta.toString())
-              .name("fuerzaVoluntad").value(fuerzaVoluntad);
+              .name("fuerzaVoluntad").value(fuerzaVoluntad)
+              .name("latitud").value(latitud)
+              .name("longitud").value(longitud);
     
         escribirJSONRasgos(writer, "fisicos", fisicos);
         escribirJSONRasgos(writer, "sociales", sociales);
@@ -578,4 +592,12 @@ public abstract class Ficha {
      * @return descripcion
      */
     public abstract String descripcion();
+    
+    public Double getLatitud() {
+        return latitud;
+    }
+    
+    public Double getLongitud() {
+        return longitud;
+    }
 }

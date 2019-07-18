@@ -8,17 +8,16 @@
     tools:context=".presentacion.actividades.CrearVampiro">
 
     <Button
-        android:id="@+id/crearVampiro"
+        android:id="@+id/refugio"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/aleatorio"
+        android:text="@string/refugio"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/guardarVampiro"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ficha"
-        app:layout_constraintVertical_bias="0.502" />
+        app:layout_constraintVertical_bias="0.998" />
 
     <TextView
         android:id="@+id/ficha"
@@ -34,23 +33,12 @@
         android:scrollbars="vertical"
         android:textColor="#B7A2FF"
         android:textSize="18sp"
-        app:layout_constraintBottom_toTopOf="@+id/crearVampiro"
+        app:layout_constraintBottom_toTopOf="@+id/refugio"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_bias="0.6"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0" />
-
-    <Button
-        android:id="@+id/guardarVampiro"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/guardar"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/crearVampiro"
-        app:layout_constraintTop_toBottomOf="@+id/ficha" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline"

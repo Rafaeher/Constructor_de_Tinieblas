@@ -16,6 +16,9 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Clase que se encarga de crear la base de datos SQLite, así como de acceder a sus tablas y modificarlas
+ */
 public class DAOVampiro {
     private static final String NOMBRE_BD = "tinieblas";
     private static final int VERSION_BD = 2;
@@ -79,6 +82,12 @@ public class DAOVampiro {
         auxiliarBD.close();
     }
     
+    /**
+     * Introduce un nuevo vampiro en la base de datos
+     *
+     * @param vampiro el vampiro
+     * @return id del vampiro
+     */
     public long insertarVampiro(Vampiro vampiro) {
         ContentValues valores = new ContentValues();
         String jsonFicha = vampiro.obtenerJSON();
@@ -100,10 +109,21 @@ public class DAOVampiro {
         return id;
     }
     
+    /**
+     * Elimina un vampiro de la base de datos
+     *
+     * @param id el id del vampiro
+     * @return true si se ha eliminado exitosamente, false en otro caso
+     */
     public boolean eliminarVampiro(Integer id) {
         return bdatos.delete(TABLA_VAMPIRO, VAMPIRO_ID + "=" + id, null) > 0;
     }
     
+    /**
+     * Elimina todos los vampiros de la base de datos
+     *
+     * @return true si se han elimiando todos exitosamente, false en otro caso
+     */
     public boolean eliminarTodosVampiros() {
         return bdatos.delete(TABLA_VAMPIRO, null, null) > 0;
     }
@@ -150,6 +170,51 @@ public class DAOVampiro {
         cursor.close();
         
         return vampiros;
+    }
+    
+    /**
+     * Lee un vampiro a través de su id único
+     *
+     * @param id el id del vampiro
+     * @return vampiro o null si no existe
+     */
+    public Vampiro leerVampiro(Long id) {
+        Log.d(BDLOG, "Se van a buscar el vampiro con id " + id);
+    
+        Cursor cursor = bdatos.query(true,
+                                     TABLA_VAMPIRO,
+                                     new String[] {VAMPIRO_ID, VAMPIRO_NOMBRE, VAMPIRO_FICHA},
+                                     VAMPIRO_ID + " = " + id,
+                                     null, null, null, null, null);
+    
+        Log.v(BDLOG, "Se ha realizado la query");
+    
+        Vampiro vampiro = null;
+    
+        if (cursor.getCount() > 0) {
+            Log.v(BDLOG, "Se ha encontrado el vampiro con id " + id);
+        
+            cursor.moveToFirst();
+            String idStr = cursor.getString(0), nombreStr = cursor.getString(1), fichaStr = cursor.getString(2);
+            vampiro = new Vampiro();
+            JsonReader reader = new JsonReader(new InputStreamReader(new ByteArrayInputStream(fichaStr.getBytes())));
+        
+            Log.v(BDLOG, "Leído vampiro con id "
+                         + cursor.getString(0)
+                         + " y JSON >>> "
+                         + System.getProperty("line.separator")
+                         + fichaStr);
+        
+            vampiro.leerJSON(reader);
+            vampiro.setNombre(nombreStr);
+            vampiro.setId(Long.parseLong(idStr));
+        } else {
+            Log.v(BDLOG, "No existe ningún vampiro con id " + id);
+        }
+    
+        cursor.close();
+    
+        return vampiro;
     }
     
     /**

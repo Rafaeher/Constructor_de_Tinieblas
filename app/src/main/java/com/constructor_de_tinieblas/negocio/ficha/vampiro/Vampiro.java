@@ -203,12 +203,14 @@ public class Vampiro extends Ficha
      * @param _concepto el concepto del vampiro
      * @param _sire el nombre del sire del vampiro
      */
-    public Vampiro(String _nombre, String _cronica, String _concepto, String _sire)
+    public Vampiro(String _nombre, String _cronica, String _concepto, String _sire, Double _latitud, Double _longitud)
     {
         nombre = _nombre;
         cronica = _cronica;
         concepto = _concepto;
         sire = _sire;
+        latitud = _latitud;
+        longitud = _longitud;
         disciplinas = new HashMap<>();
         trasfondos = new HashMap<>();
         sangre = new Sangre();

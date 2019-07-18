@@ -31,11 +31,22 @@
         android:layout_alignEnd="@+id/vistaCrearVampiro"
         android:layout_alignRight="@+id/vistaCrearVampiro"
         android:text="@string/buscar_vampiro"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/acercade"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/vistaCrearVampiro"
         tools:layout_conversion_wrapHeight="126"
         tools:layout_conversion_wrapWidth="377" />
+
+    <Button
+        android:id="@+id/acercade"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/acerca_de"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/vistaBuscarVampiro" />
 </androidx.constraintlayout.widget.ConstraintLayout>

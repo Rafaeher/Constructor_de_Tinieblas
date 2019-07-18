@@ -1,0 +1,53 @@
+* {
+    padding: 0;
+    margin: 0;
+}
+
+body {
+    background-image: linear-gradient(#000000, #c9a7ff);
+    color: white;
+    font-size: 100%;
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+}
+
+.titulo {
+    margin-top: 10%;
+    font-size: 200%;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    font-weight: bold;
+    font-family: 'Times New Roman', Times, serif;
+
+}
+
+.texto {
+    margin-top: 5%;
+    margin-bottom: 3%;
+    margin-left: auto;
+    margin-right: auto;
+    width: 90%;
+
+}
+
+.cita {
+    margin-bottom: 4%;
+    margin-left: auto;
+    margin-right: auto;
+    width: 65%;
+    font-style: italic;
+    color: rgb(0, 0, 0);
+}
+
+.texto a {
+    color: #ffe5a7;
+}
+
+.texto a :visited {
+    color: #ffe5a7;
+}

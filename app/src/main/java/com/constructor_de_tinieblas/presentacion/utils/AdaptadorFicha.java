@@ -13,10 +13,15 @@ import com.constructor_de_tinieblas.negocio.ficha.Ficha;
 
 import java.util.List;
 
+/**
+ * Clase necesaria para adaptar apropiadamente una lista de fichas de una raza de Mundo de Tinieblas
+ *
+ * @param <Raza> la raza de la lista (vampiros, hombres lobo, magos...)
+ */
 public class AdaptadorFicha<Raza extends Ficha> extends BaseAdapter {
     
-    protected Activity activity;
-    protected List<Raza> fichas;
+    private Activity activity;
+    private List<Raza> fichas;
     
     /**
      * Constructora que guarda una lista de fichas de personaje de Mundo de Tinieblas
